@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="google-site-verification"
+        content="WMyPomJliEFUmI7m92eK5YmCg4I1kH-W5sT7IqY5"
+    >
+
+    <title>حسبة بيت | حاسبة تكاليف البناء والتشطيب في مصر 2026</title>
+
+    <meta
+        name="description"
+        content="احسب تكلفة البناء والتشطيب في مصر حسب المساحة ونوع المشروع ومستوى الجودة والميزانية."
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background: #F7FAFC;
+            color: #2D3748;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(
+                135deg,
+                #1A365D 0%,
+                #2B6CB0 100%
+            );
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .hidden-step {
+            display: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="gradient-bg text-white py-12 px-5 text-center">
+
+    <nav class="max-w-6xl mx-auto flex justify-between items-center mb-12">
+
+        <a
+            href="index.html"
+            class="text-2xl font-bold"
+        >
+            حسبة بيت
+        </a>
+
+
+        <div class="hidden md:flex gap-6 text-sm">
+
+            <a
+                href="index.html"
+                class="hover:opacity-80"
+            >
+                الرئيسية
+            </a>
+
+            <a
+                href="methodology.html"
+                class="hover:opacity-80"
+            >
+                المنهجية
+            </a>
+
+            <a
+                href="about.html"
+                class="hover:opacity-80"
+            >
+                عن المنصة
+            </a>
+
+            <a
+                href="privacy-policy.html"
+                class="hover:opacity-80"
+            >
+                سياسة الخصوصية
+            </a>
+
+            <a
+                href="terms.html"
+                class="hover:opacity-80"
+            >
+                الشروط والأحكام
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <h1 class="text-3xl md:text-5xl font-bold mb-5">
+        احسب تكلفة بيتك في دقائق
+    </h1>
+
+
+    <p class="text-lg md:text-xl opacity-90 max-w-3xl mx-auto">
+        حاسبة تقديرية لتكلفة البناء والتشطيب في مصر بناءً على المساحة
+        ونوع المشروع ومستوى الجودة.
+    </p>
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="max-w-4xl mx-auto -mt-10 px-4 pb-20">
+
+
+    <!-- مساحة إعلانية -->
+
+    <div
+        class="bg-gray-100 border border-dashed border-gray-300 h-20 mb-6 flex items-center justify-center text-gray-400 rounded-xl"
+    >
+        مساحة إعلانية
+    </div>
+
+
+
+    <!-- =========================
+         CALCULATOR
+    ========================= -->
+
+    <section
+        class="bg-white rounded-2xl p-6 md:p-8 card-shadow border border-gray-100"
+    >
+
+
+        <!-- مؤشرات الخطوات -->
+
+        <div class="grid grid-cols-4 gap-2 mb-10 text-sm">
+
+            <div
+                id="indicator-1"
+                class="text-center font-bold text-blue-600"
+            >
+                1. المساحة
+            </div>
+
+            <div
+                id="indicator-2"
+                class="text-center text-gray-400"
+            >
+                2. النوع
+            </div>
+
+            <div
+                id="indicator-3"
+                class="text-center text-gray-400"
+            >
+                3. الجودة
+            </div>
+
+            <div
+                id="indicator-4"
+                class="text-center text-gray-400"
+            >
+                4. الميزانية
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             STEP 1
+        ========================= -->
+
+        <div id="step-1">
+
+            <h2 class="text-2xl font-bold mb-3">
+                ما مساحة الوحدة؟
+            </h2>
+
+            <p class="text-gray-500 mb-6">
+                أدخل المساحة بالمتر المربع.
+            </p>
+
+
+            <input
+                id="area-input"
+                type="number"
+                min="1"
+                placeholder="مثال: 120"
+                class="w-full p-4 border rounded-xl text-xl outline-none focus:ring-2 focus:ring-blue-500"
+            >
+
+
+            <button
+                type="button"
+                onclick="goToStep(2)"
+                class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl"
+            >
+                التالي
+            </button>
+
+        </div>
+
+
+
+        <!-- =========================
+             STEP 2
+        ========================= -->
+
+        <div
+            id="step-2"
+            class="hidden-step"
+        >
+
+            <h2 class="text-2xl font-bold mb-3">
+                نوع المشروع
+            </h2>
+
+            <p class="text-gray-500 mb-6">
+                اختر المرحلة التي تريد حساب تكلفتها.
+            </p>
+
+
+            <div class="grid md:grid-cols-2 gap-4">
+
+
+                <button
+                    type="button"
+                    onclick="selectType('construction')"
+                    class="border rounded-xl p-5 text-right hover:border-blue-500"
+                >
+
+                    <div class="font-bold text-lg">
+                        بناء
+                    </div>
+
+                    <div class="text-sm text-gray-500">
+                        تكلفة أعمال البناء
+                    </div>
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    onclick="selectType('finishing')"
+                    class="border rounded-xl p-5 text-right hover:border-blue-500"
+                >
+
+                    <div class="font-bold text-lg">
+                        تشطيب
+                    </div>
+
+                    <div class="text-sm text-gray-500">
+                        تكلفة أعمال التشطيب
+                    </div>
+
+                </button>
+
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="goToStep(1)"
+                class="mt-6 text-gray-500"
+            >
+                رجوع
+            </button>
+
+        </div>
+
+
+
+        <!-- =========================
+             STEP 3
+        ========================= -->
+
+        <div
+            id="step-3"
+            class="hidden-step"
+        >
+
+            <h2 class="text-2xl font-bold mb-3">
+                مستوى الجودة
+            </h2>
+
+            <p class="text-gray-500 mb-6">
+                اختر المستوى الأقرب لما تريده.
+            </p>
+
+
+            <div
+                id="quality-options"
+                class="grid md:grid-cols-2 gap-4"
+            ></div>
+
+
+            <button
+                type="button"
+                onclick="goToStep(2)"
+                class="mt-6 text-gray-500"
+            >
+                رجوع
+            </button>
+
+        </div>
+
+
+
+        <!-- =========================
+             STEP 4
+        ========================= -->
+
+        <div
+            id="step-4"
+            class="hidden-step"
+        >
+
+            <h2 class="text-2xl font-bold mb-3">
+                الميزانية المتاحة
+            </h2>
+
+            <p class="text-gray-500 mb-6">
+                يمكنك إدخال ميزانيتك للمقارنة، أو تركها فارغة.
+            </p>
+
+
+            <input
+                id="budget-input"
+                type="number"
+                min="0"
+                placeholder="مثال: 1000000"
+                class="w-full p-4 border rounded-xl text-xl outline-none focus:ring-2 focus:ring-blue-500"
+            >
+
+
+            <button
+                type="button"
+                onclick="calculateResult()"
+                class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl"
+            >
+                احسب التكلفة
+            </button>
+
+
+            <button
+                type="button"
+                onclick="goToStep(3)"
+                class="mt-6 mr-4 text-gray-500"
+            >
+                رجوع
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         RESULTS
+    ========================= -->
+
+    <section
+        id="results-page"
+        class="hidden mt-8 bg-white rounded-2xl p-6 md:p-8 card-shadow border border-gray-100"
+    >
+
+        <h2 class="text-2xl font-bold mb-6">
+            تقرير الميزانية التقديري
+        </h2>
+
+
+
+        <!-- الأسعار الأساسية -->
+
+        <div class="grid md:grid-cols-3 gap-4 mb-8">
+
+
+            <div class="bg-gray-50 rounded-xl p-5">
+
+                <p class="text-sm text-gray-500">
+                    الحد الأدنى
+                </p>
+
+                <div
+                    id="min-price"
+                    class="text-2xl font-bold mt-2"
+                >
+                    0 ج.م
+                </div>
+
+            </div>
+
+
+
+            <div class="bg-blue-50 rounded-xl p-5">
+
+                <p class="text-sm text-gray-500">
+                    التكلفة المتوقعة
+                </p>
+
+                <div
+                    id="typical-price"
+                    class="text-2xl font-bold text-blue-800 mt-2"
+                >
+                    0 ج.م
+                </div>
+
+            </div>
+
+
+
+            <div class="bg-gray-50 rounded-xl p-5">
+
+                <p class="text-sm text-gray-500">
+                    الحد الأقصى
+                </p>
+
+                <div
+                    id="max-price"
+                    class="text-2xl font-bold mt-2"
+                >
+                    0 ج.م
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- الاحتياطي -->
+
+        <div class="bg-yellow-50 rounded-xl p-5 mb-8">
+
+            <p class="text-gray-600">
+                احتياطي الطوارئ 10%
+            </p>
+
+            <div
+                id="reserve-price"
+                class="text-xl font-bold mt-2"
+            >
+                0 ج.م
+            </div>
+
+            <p class="text-sm text-gray-500 mt-2">
+                الإجمالي النهائي المتوقع يشمل احتياطي الطوارئ.
+            </p>
+
+        </div>
+
+
+
+        <!-- الإجمالي -->
+
+        <div class="bg-blue-50 rounded-xl p-6 mb-8">
+
+            <p class="text-gray-600">
+                الإجمالي المتوقع شامل الاحتياطي
+            </p>
+
+            <div
+                id="grand-price"
+                class="text-3xl font-bold text-blue-800 mt-2"
+            >
+                0 ج.م
+            </div>
+
+        </div>
+
+
+
+        <!-- توزيع التكلفة -->
+
+        <div class="border-t pt-6">
+
+            <h3 class="font-bold text-xl mb-5">
+                توزيع التكلفة
+            </h3>
+
+
+            <div class="grid md:grid-cols-3 gap-4">
+
+
+                <div class="bg-gray-50 rounded-xl p-4">
+
+                    <p class="text-gray-500">
+                        الخامات
+                    </p>
+
+                    <div
+                        id="materials-price"
+                        class="font-bold mt-2"
+                    >
+                        0 ج.م
+                    </div>
+
+                </div>
+
+
+
+                <div class="bg-gray-50 rounded-xl p-4">
+
+                    <p class="text-gray-500">
+                        العمالة
+                    </p>
+
+                    <div
+                        id="labor-price"
+                        class="font-bold mt-2"
+                    >
+                        0 ج.م
+                    </div>
+
+                </div>
+
+
+
+                <div class="bg-gray-50 rounded-xl p-4">
+
+                    <p class="text-gray-500">
+                        الإدارة
+                    </p>
+
+                    <div
+                        id="management-price"
+                        class="font-bold mt-2"
+                    >
+                        0 ج.م
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- مقارنة الميزانية -->
+
+        <div
+            id="budget-result"
+            class="hidden mt-8 rounded-xl p-6"
+        ></div>
+
+
+
+        <!-- تعديل مستوى التكلفة -->
+
+        <div class="mt-8">
+
+            <label class="font-bold block mb-3">
+                تعديل مستوى التكلفة
+            </label>
+
+
+            <input
+                id="adjust-slider"
+                type="range"
+                min="0.8"
+                max="1.5"
+                step="0.05"
+                value="1"
+                class="w-full"
+                oninput="adjustResult()"
+            >
+
+
+            <div class="flex justify-between text-xs text-gray-500 mt-2">
+
+                <span>
+                    اقتصادي
+                </span>
+
+                <span>
+                    فاخر
+                </span>
+
+            </div>
+
+
+            <div
+                id="adjusted-price"
+                class="text-xl font-bold text-center mt-4"
+            >
+                0 ج.م
+            </div>
+
+        </div>
+
+
+
+        <!-- المشاركة وإعادة الحساب -->
+
+        <div class="mt-10 flex flex-wrap gap-3">
+
+
+            <button
+                type="button"
+                onclick="shareWhatsApp()"
+                class="bg-green-500 text-white px-6 py-3 rounded-xl"
+            >
+                مشاركة واتساب
+            </button>
+
+
+            <button
+                type="button"
+                onclick="shareFacebook()"
+                class="bg-blue-800 text-white px-6 py-3 rounded-xl"
+            >
+                مشاركة فيسبوك
+            </button>
+
+
+            <button
+                type="button"
+                onclick="resetCalculator()"
+                class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl"
+            >
+                حساب جديد
+            </button>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="bg-gray-900 text-white py-10 text-center text-sm">
+
+    <p>
+        © 2026 حسبة بيت - جميع الحقوق محفوظة.
+    </p>
+
+
+    <div class="flex justify-center gap-4 mt-4 flex-wrap">
+
+        <a
+            href="index.html"
+            class="hover:opacity-80"
+        >
+            الرئيسية
+        </a>
+
+        <a
+            href="methodology.html"
+            class="hover:opacity-80"
+        >
+            المنهجية
+        </a>
+
+        <a
+            href="about.html"
+            class="hover:opacity-80"
+        >
+            عن المنصة
+        </a>
+
+        <a
+            href="privacy-policy.html"
+            class="hover:opacity-80"
+        >
+            سياسة الخصوصية
+        </a>
+
+        <a
+            href="terms.html"
+            class="hover:opacity-80"
+        >
+            الشروط والأحكام
+        </a>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================
+     CALCULATOR ENGINE
+========================= -->
+
+<script type="module">
+
+import CalculatorEngine
+    from "./engine/calculatorEngine.js";
+
+import PRICING_DATA
+    from "./config/pricingData.js";
+
+
+let currentStep = 1;
+
+let selectedType = null;
+
+let selectedLevel = null;
+
+let latestResult = null;
+
+
+
+/* =========================
+   التنقل بين الخطوات
+========================= */
+
+window.goToStep = function(step) {
+
+    for (let i = 1; i <= 4; i++) {
+
+        document
+            .getElementById("step-" + i)
+            .classList
+            .add("hidden-step");
+
+
+        document
+            .getElementById("indicator-" + i)
+            .classList
+            .remove(
+                "text-blue-600",
+                "font-bold"
+            );
+
+
+        document
+            .getElementById("indicator-" + i)
+            .classList
+            .add("text-gray-400");
+
+    }
+
+
+    document
+        .getElementById("step-" + step)
+        .classList
+        .remove("hidden-step");
+
+
+    document
+        .getElementById("indicator-" + step)
+        .classList
+        .remove("text-gray-400");
+
+
+    document
+        .getElementById("indicator-" + step)
+        .classList
+        .add(
+            "text-blue-600",
+            "font-bold"
+        );
+
+
+    currentStep = step;
+
+};
+
+
+
+/* =========================
+   اختيار نوع المشروع
+========================= */
+
+window.selectType = function(type) {
+
+    selectedType = type;
+
+    const options =
+        document.getElementById(
+            "quality-options"
+        );
+
+
+    options.innerHTML = "";
+
+
+    const levels =
+        Object.keys(
+            PRICING_DATA.phases[type]
+        );
+
+
+    levels.forEach(level => {
+
+        const data =
+            PRICING_DATA.phases[type][level];
+
+
+        const names = {
+
+            standard: "قياسي",
+
+            premium: "مميز",
+
+            economic: "اقتصادي",
+
+            luxury: "فاخر",
+
+            ultra_luxury: "فاخر جدًا"
+
+        };
+
+
+        const name =
+            names[level] || level;
+
+
+        const button =
+            document.createElement("button");
+
+
+        button.type = "button";
+
+
+        button.className =
+            "border rounded-xl p-5 text-right hover:border-blue-500";
+
+
+        button.innerHTML = `
+
+            <div class="font-bold text-lg">
+                ${name}
+            </div>
+
+            <div class="text-sm text-gray-500 mt-1">
+                ${data.min.toLocaleString()}
+                -
+                ${data.max.toLocaleString()}
+                ج.م / م²
+            </div>
+
+        `;
+
+
+        button.onclick = function() {
+
+            selectedLevel = level;
+
+            goToStep(4);
+
+        };
+
+
+        options.appendChild(button);
+
+    });
+
+
+    goToStep(3);
+
+};
+
+
+
+/* =========================
+   حساب التكلفة
+========================= */
+
+window.calculateResult = function() {
+
+    const area =
+        Number(
+            document.getElementById(
+                "area-input"
+            ).value
+        );
+
+
+    const budgetValue =
+        document.getElementById(
+            "budget-input"
+        ).value;
+
+
+    if (!area || area <= 0) {
+
+        alert(
+            "من فضلك أدخل مساحة صحيحة."
+        );
+
+        goToStep(1);
+
+        return;
+
+    }
+
+
+    if (!selectedType || !selectedLevel) {
+
+        alert(
+            "من فضلك اختر نوع المشروع ومستوى الجودة."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const engine =
+            new CalculatorEngine(
+                area,
+                selectedType,
+                selectedLevel,
+                budgetValue
+            );
+
+
+        latestResult =
+            engine.calculate();
+
+
+        document.getElementById(
+            "min-price"
+        ).innerText =
+            formatMoney(
+                latestResult.minTotal
+            );
+
+
+        document.getElementById(
+            "typical-price"
+        ).innerText =
+            formatMoney(
+                latestResult.typicalTotal
+            );
+
+
+        document.getElementById(
+            "max-price"
+        ).innerText =
+            formatMoney(
+                latestResult.maxTotal
+            );
+
+
+        document.getElementById(
+            "reserve-price"
+        ).innerText =
+            formatMoney(
+                latestResult.reserve
+            );
+
+
+        document.getElementById(
+            "grand-price"
+        ).innerText =
+            formatMoney(
+                latestResult.grandTotal
+            );
+
+
+        document.getElementById(
+            "materials-price"
+        ).innerText =
+            formatMoney(
+                latestResult.breakdown.materials
+            );
+
+
+        document.getElementById(
+            "labor-price"
+        ).innerText =
+            formatMoney(
+                latestResult.breakdown.labor
+            );
+
+
+        document.getElementById(
+            "management-price"
+        ).innerText =
+            formatMoney(
+                latestResult.breakdown.management
+            );
+
+
+        renderBudgetResult();
+
+
+        document
+            .getElementById("results-page")
+            .classList
+            .remove("hidden");
+
+
+        document
+            .getElementById("results-page")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+
+        adjustResult();
+
+
+    } catch (error) {
+
+        alert(
+            "حدث خطأ في الحسبة: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+
+/* =========================
+   نتيجة مقارنة الميزانية
+========================= */
+
+function renderBudgetResult() {
+
+    const box =
+        document.getElementById(
+            "budget-result"
+        );
+
+
+    if (
+        latestResult.userBudget === null ||
+        latestResult.userBudget <= 0
+    ) {
+
+        box.classList.add("hidden");
+
+        return;
+
+    }
+
+
+    box.classList.remove("hidden");
+
+
+    if (
+        latestResult.status ===
+        "within_budget"
+    ) {
+
+        box.className =
+            "mt-8 rounded-xl p-6 bg-green-50 text-green-800";
+
+
+        box.innerHTML = `
+
+            <div class="font-bold text-lg mb-2">
+                الميزانية المدخلة تغطي التكلفة التقديرية.
+            </div>
+
+            <div>
+                الفرق التقريبي:
+                ${formatMoney(
+                    latestResult.budgetGap
+                )}
+            </div>
+
+        `;
+
+
+    } else {
+
+        box.className =
+            "mt-8 rounded-xl p-6 bg-red-50 text-red-800";
+
+
+        box.innerHTML = `
+
+            <div class="font-bold text-lg mb-2">
+                الميزانية المدخلة أقل من التكلفة التقديرية.
+            </div>
+
+            <div>
+                الفرق التقريبي:
+                ${formatMoney(
+                    Math.abs(
+                        latestResult.budgetGap
+                    )
+                )}
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =========================
+   تعديل النتيجة
+========================= */
+
+window.adjustResult = function() {
+
+    if (!latestResult) return;
+
+
+    const multiplier =
+        Number(
+            document.getElementById(
+                "adjust-slider"
+            ).value
+        );
+
+
+    const adjusted =
+        latestResult.grandTotal *
+        multiplier;
+
+
+    document.getElementById(
+        "adjusted-price"
+    ).innerText =
+        formatMoney(adjusted);
+
+};
+
+
+
+/* =========================
+   مشاركة واتساب
+========================= */
+
+window.shareWhatsApp = function() {
+
+    if (!latestResult) return;
+
+
+    const text =
+        `حسبة بيت - تكلفة تقديرية\n` +
+        `المساحة: ${latestResult.area} م²\n` +
+        `التكلفة المتوقعة: ${formatMoney(
+            latestResult.grandTotal
+        )}`;
+
+
+    window.open(
+        "https://wa.me/?text=" +
+        encodeURIComponent(text),
+        "_blank"
+    );
+
+};
+
+
+
+/* =========================
+   مشاركة فيسبوك
+========================= */
+
+window.shareFacebook = function() {
+
+    if (!latestResult) return;
+
+
+    const url =
+        encodeURIComponent(
+            window.location.href
+        );
+
+
+    window.open(
+        "https://www.facebook.com/sharer/sharer.php?u=" +
+        url,
+        "_blank"
+    );
+
+};
+
+
+
+/* =========================
+   بدء حساب جديد
+========================= */
+
+window.resetCalculator = function() {
+
+    location.reload();
+
+};
+
+
+
+/* =========================
+   تنسيق الأموال
+========================= */
+
+function formatMoney(value) {
+
+    return (
+        Number(value)
+            .toLocaleString("ar-EG") +
+        " ج.م"
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
