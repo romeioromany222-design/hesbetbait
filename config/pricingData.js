@@ -2,33 +2,44 @@ const PRICING_DATA = {
 
     metadata: {
 
-        lastUpdated: "2026-09-24",
+        version: "2.0",
+
+        lastUpdated: "2026-09-25",
 
         currency: "EGP",
 
         region: "Egypt",
 
         methodology:
-            "الأسعار استرشادية وتُعرض كنطاقات سوقية. السعر المعتاد داخل كل نطاق هو نقطة وسطية حسابية وليس سعرًا رسميًا ثابتًا.",
+            "النطاقات السعرية استرشادية وتُستخدم لبناء تقدير أولي. لا تمثل عرض سعر ملزمًا.",
 
         importantNote:
-            "أسعار التشطيب تختلف حسب حالة الوحدة والموقع والخامات ونطاق الأعمال. بيانات مواد البناء الأساسية تُحدّث بصورة أكثر تكرارًا."
+            "الأسعار تختلف حسب المدينة، الماركة، المواصفات، الكميات، التركيب، وحالة الوحدة. أي بند موسوم provisional يحتاج تحديثًا قبل اعتباره مرجعًا سوقيًا قويًا.",
+
+        confidenceLevels: {
+
+            high:
+                "مصدر حديث ومحدد يمكن الرجوع إليه.",
+
+            medium:
+                "مرجع سوقي أو مجموعة بيانات محدودة.",
+
+            low:
+                "قيمة مؤقتة تحتاج تحققًا إضافيًا."
+
+        }
 
     },
 
 
+    /*
+    =========================================================
+    1. مراحل المشروع الأساسية
+    =========================================================
+    */
+
     phases: {
 
-
-        /*
-        ==============================
-        البناء
-        ==============================
-
-        هذه الأرقام تبقى مؤقتة لحين بناء قاعدة أسعار تفصيلية
-        للبناء من الحفر والأساسات والخرسانة والمباني.
-        لا نعتبرها أسعارًا رسمية.
-        */
 
         construction: {
 
@@ -42,8 +53,10 @@ const PRICING_DATA = {
 
                 status: "provisional",
 
+                confidence: "low",
+
                 note:
-                    "مرجع أولي للتقدير المبكر، وليس عرض سعر نهائيًا."
+                    "تقدير أولي. لا نعتمد عليه كمرجع سوقي نهائي."
 
             },
 
@@ -58,22 +71,15 @@ const PRICING_DATA = {
 
                 status: "provisional",
 
+                confidence: "low",
+
                 note:
-                    "مرجع أولي للتقدير المبكر، وليس عرض سعر نهائيًا."
+                    "تقدير أولي. يحتاج قاعدة أسعار تفصيلية للبناء."
 
             }
 
         },
 
-
-        /*
-        ==============================
-        التشطيب
-        ==============================
-
-        النطاقات مبنية على قراءة بيانات سوقية منشورة في 2026.
-        السعر typical = نقطة وسطية حسابية للنطاق.
-        */
 
         finishing: {
 
@@ -88,11 +94,16 @@ const PRICING_DATA = {
 
                 status: "market_reference",
 
+                confidence: "medium",
+
                 source:
-                    "Moqaysa - Finishing Cost Calculator Egypt 2026",
+                    "Moqaysa - Egypt finishing calculator",
 
                 sourceUrl:
-                    "https://moqaysa.com/en"
+                    "https://moqaysa.com/en",
+
+                note:
+                    "نطاق سوقي استرشادي وليس سعرًا رسميًا موحدًا."
 
             },
 
@@ -107,11 +118,16 @@ const PRICING_DATA = {
 
                 status: "market_reference",
 
+                confidence: "medium",
+
                 source:
-                    "Moqaysa - Finishing Cost Calculator Egypt 2026",
+                    "Moqaysa - Egypt finishing calculator",
 
                 sourceUrl:
-                    "https://moqaysa.com/en"
+                    "https://moqaysa.com/en",
+
+                note:
+                    "نطاق سوقي استرشادي."
 
             },
 
@@ -126,14 +142,16 @@ const PRICING_DATA = {
 
                 status: "market_reference",
 
+                confidence: "medium",
+
                 source:
-                    "Moqaysa - High-end and Luxury finishing ranges 2026",
+                    "Moqaysa - Egypt finishing calculator",
 
                 sourceUrl:
                     "https://moqaysa.com/en",
 
                 note:
-                    "النطاق يجمع فئات التشطيب الأعلى التي تنقسم في بعض المصادر إلى High-end وLuxury."
+                    "نطاق تجميعي لفئات التشطيب الأعلى."
 
             },
 
@@ -148,11 +166,16 @@ const PRICING_DATA = {
 
                 status: "market_reference",
 
+                confidence: "medium",
+
                 source:
-                    "Moqaysa - Ultra Luxury finishing range 2026",
+                    "Moqaysa - Egypt finishing calculator",
 
                 sourceUrl:
-                    "https://moqaysa.com/en"
+                    "https://moqaysa.com/en",
+
+                note:
+                    "نطاق استرشادي للمستويات شديدة الفخامة."
 
             }
 
@@ -162,54 +185,63 @@ const PRICING_DATA = {
 
 
     /*
-    ==============================
-    مواد البناء
-    ==============================
+    =========================================================
+    2. مواد البناء
+    =========================================================
     */
-
 
     materials: {
 
 
-        cement: {
+        steel_ezz: {
 
             unit: "ton",
 
-            price: 4165,
+            min: 39782,
 
-            basis:
-                "أسمنت رمادي - مرجع سوقي بتاريخ 24-09-2026",
+            typical: 39782,
 
-            status: "current_reference",
-
-            source:
-                "بوابة الأسعار المحلية والعالمية التابعة لمجلس الوزراء كما نقلتها مصراوي",
-
-            sourceUrl:
-                "https://www.masrawy.com/news/news_economy/details/2026/9/24/3052960"
-
-        },
-
-
-        steel: {
-
-            unit: "ton",
+            max: 39782,
 
             price: 39782,
 
-            basis:
-                "حديد عز - مرجع سوقي بتاريخ 24-09-2026",
-
             status: "current_reference",
 
+            confidence: "high",
+
             source:
-                "بوابة الأسعار المحلية والعالمية التابعة لمجلس الوزراء كما نقلتها مصراوي",
+                "بيانات بوابة الأسعار المحلية والعالمية التابعة لمجلس الوزراء كما نشرت في 24 سبتمبر 2026",
 
             sourceUrl:
                 "https://www.masrawy.com/news/news_economy/details/2026/9/24/3052960",
 
             note:
-                "القيمة تمثل مرجعًا لحديد عز وليست متوسط جميع أنواع الحديد."
+                "مرجع لحديد عز وليس متوسط كل أنواع الحديد."
+
+        },
+
+
+        cement_gray: {
+
+            unit: "ton",
+
+            min: 4165,
+
+            typical: 4165,
+
+            max: 4165,
+
+            price: 4165,
+
+            status: "current_reference",
+
+            confidence: "high",
+
+            source:
+                "بيانات بوابة الأسعار المحلية والعالمية التابعة لمجلس الوزراء كما نشرت في 24 سبتمبر 2026",
+
+            sourceUrl:
+                "https://www.masrawy.com/news/news_economy/details/2026/9/24/3052960"
 
         },
 
@@ -218,12 +250,20 @@ const PRICING_DATA = {
 
             unit: "m3",
 
+            min: 200,
+
+            typical: 250,
+
+            max: 350,
+
             price: 250,
 
-            status: "needs_verification",
+            status: "provisional",
+
+            confidence: "low",
 
             note:
-                "قيمة قديمة محفوظة مؤقتًا. لا تعتمد عليها كبيانات سوق 2026 قبل تحديثها بمصدر مباشر."
+                "قيمة مؤقتة لحين توفر مصدر مباشر حديث حسب النوع والمنطقة."
 
         },
 
@@ -232,12 +272,20 @@ const PRICING_DATA = {
 
             unit: "1000 pcs",
 
+            min: 2000,
+
+            typical: 2200,
+
+            max: 2600,
+
             price: 2200,
 
-            status: "needs_verification",
+            status: "provisional",
+
+            confidence: "low",
 
             note:
-                "قيمة استرشادية تحتاج تحديثًا دوريًا حسب النوع والنقل والمنطقة."
+                "تتغير حسب النوع والنقل والمنطقة."
 
         }
 
@@ -245,12 +293,9 @@ const PRICING_DATA = {
 
 
     /*
-    ==============================
-    معدلات العمالة
-    ==============================
-
-    لا نغيّرها إلى أرقام جديدة من مصدر واحد.
-    تظل مؤقتة إلى أن نبني قاعدة مصنعية مستقلة.
+    =========================================================
+    3. معدلات العمالة
+    =========================================================
     */
 
     labor_rates: {
@@ -260,9 +305,17 @@ const PRICING_DATA = {
 
             unit: "m2",
 
+            min: 70,
+
+            typical: 80,
+
+            max: 100,
+
             price: 80,
 
-            status: "needs_verification"
+            status: "provisional",
+
+            confidence: "low"
 
         },
 
@@ -271,9 +324,17 @@ const PRICING_DATA = {
 
             unit: "m2",
 
+            min: 80,
+
+            typical: 95,
+
+            max: 120,
+
             price: 95,
 
-            status: "needs_verification"
+            status: "provisional",
+
+            confidence: "low"
 
         },
 
@@ -282,9 +343,17 @@ const PRICING_DATA = {
 
             unit: "point",
 
+            min: 300,
+
+            typical: 350,
+
+            max: 450,
+
             price: 350,
 
-            status: "needs_verification"
+            status: "provisional",
+
+            confidence: "low"
 
         },
 
@@ -293,9 +362,17 @@ const PRICING_DATA = {
 
             unit: "bathroom",
 
+            min: 7000,
+
+            typical: 8500,
+
+            max: 11000,
+
             price: 8500,
 
-            status: "needs_verification"
+            status: "provisional",
+
+            confidence: "low"
 
         }
 
@@ -303,14 +380,505 @@ const PRICING_DATA = {
 
 
     /*
-    ==============================
-    مصادر البيانات
-    ==============================
+    =========================================================
+    4. المطبخ
+    =========================================================
+
+    ملاحظة:
+    أسعار IKEA الحالية مرجع لتكوينات modular محددة،
+    وليست سعر متر مطبخ مصري custom شامل التركيب.
+    لذلك نستخدمها كمرجع وليس كسعر سوق نهائي.
+    */
+
+    kitchen: {
+
+
+        modular_reference: {
+
+            unit: "complete kitchen configuration",
+
+            min: 21080,
+
+            typical: 27200,
+
+            max: 33280,
+
+            status: "retail_reference",
+
+            confidence: "medium",
+
+            sources: [
+
+                {
+
+                    name:
+                        "IKEA Egypt KNOXHULT",
+
+                    url:
+                        "https://www.ikea.com/eg/en/cat/knoxhult-complete-unit-kitchens-48978/"
+
+                }
+
+            ],
+
+            note:
+                "أسعار تكوينات KNOXHULT المنشورة حاليًا. لا تمثل مطبخ MDF أو custom kitchen محلي شامل كل الخامات والتركيب."
+
+        },
+
+
+        custom_economic: {
+
+            min: 25000,
+
+            typical: 40000,
+
+            max: 60000,
+
+            status: "provisional",
+
+            confidence: "low",
+
+            note:
+                "تقدير مؤقت للمطابخ المحلية يحتاج مسحًا مباشرًا لمصنعي المطابخ في مصر."
+
+        },
+
+
+        custom_standard: {
+
+            min: 40000,
+
+            typical: 65000,
+
+            max: 100000,
+
+            status: "provisional",
+
+            confidence: "low",
+
+            note:
+                "تقدير مؤقت يحتاج تحققًا ميدانيًا."
+
+        },
+
+
+        custom_luxury: {
+
+            min: 70000,
+
+            typical: 110000,
+
+            max: 180000,
+
+            status: "provisional",
+
+            confidence: "low",
+
+            note:
+                "تقدير مؤقت للمواصفات الأعلى."
+
+        }
+
+    },
+
+
+    /*
+    =========================================================
+    5. التكييفات
+    =========================================================
+    */
+
+    air_conditioning: {
+
+
+        hp_1_5: {
+
+            unit: "unit",
+
+            min: 21409,
+
+            typical: 26419,
+
+            max: 30905,
+
+            status: "retail_reference",
+
+            confidence: "high",
+
+            source:
+                "Carrefour Egypt - current 1.5 HP AC listings",
+
+            sourceUrl:
+                "https://www.carrefouregypt.com/mafegy/ar/c/promo-1-5-Hp",
+
+            note:
+                "نطاق مأخوذ من موديلات 1.5 حصان منشورة حاليًا. لا يشمل بالضرورة التركيب الإضافي أو النحاس أو الأعمال الكهربائية."
+
+        },
+
+
+        hp_2_25: {
+
+            unit: "unit",
+
+            min: 35199,
+
+            typical: 44063,
+
+            max: 48909,
+
+            status: "retail_reference",
+
+            confidence: "medium",
+
+            source:
+                "Carrefour Egypt - current AC listings",
+
+            sourceUrl:
+                "https://www.carrefouregypt.com/mafegy/ar/c/NFEGY4040112",
+
+            note:
+                "مرجع لعدة موديلات حالية فقط."
+
+        }
+
+    },
+
+
+    /*
+    =========================================================
+    6. الأجهزة الكهربائية
+    =========================================================
+
+    لا نستخدم رقمًا مجمعًا نهائيًا الآن،
+    بل نضع بنية جاهزة حتى ندخل أسعار المنتجات الفعلية.
+    */
+
+    appliances: {
+
+
+        refrigerator: {
+
+            unit: "unit",
+
+            status: "pending_market_scan",
+
+            confidence: "low",
+
+            price: null,
+
+            note:
+                "يحتاج مسحًا مباشرًا لعدة موديلات حالية قبل إدخال نطاق."
+
+        },
+
+
+        washing_machine: {
+
+            unit: "unit",
+
+            status: "pending_market_scan",
+
+            confidence: "low",
+
+            price: null
+
+        },
+
+
+        cooker: {
+
+            unit: "unit",
+
+            min: 12449,
+
+            typical: 12699,
+
+            max: 12699,
+
+            price: 12699,
+
+            status: "retail_reference",
+
+            confidence: "medium",
+
+            source:
+                "Carrefour Egypt - Fresh 5-burner cookers",
+
+            sourceUrl:
+                "https://www.carrefouregypt.com/mafegy/ar/p/623091"
+
+        },
+
+
+        microwave: {
+
+            unit: "unit",
+
+            min: 3599,
+
+            typical: 5999,
+
+            max: 8999,
+
+            status: "retail_reference",
+
+            confidence: "medium",
+
+            source:
+                "Carrefour Egypt - microwave listings",
+
+            sourceUrl:
+                "https://www.carrefouregypt.com/mafegy/ar/c/NFEGY4040600"
+
+        },
+
+
+        television_55: {
+
+            unit: "unit",
+
+            min: 17499,
+
+            typical: 19999,
+
+            max: 25700,
+
+            status: "retail_reference",
+
+            confidence: "medium",
+
+            source:
+                "Carrefour Egypt - 55 inch TV listings",
+
+            sourceUrl:
+                "https://www.carrefouregypt.com/mafegy/en/c/55inch-tvs"
+
+        }
+
+    },
+
+
+    /*
+    =========================================================
+    7. الأثاث
+    =========================================================
+
+    لا نضع أرقامًا نهائية بدون مسح فعلي لأسعار السوق.
+    */
+
+    furniture: {
+
+
+        basic: {
+
+            min: null,
+
+            typical: null,
+
+            max: null,
+
+            status: "pending_market_scan",
+
+            confidence: "low",
+
+            note:
+                "يحتاج مسحًا من متاجر أثاث مصرية متعددة."
+
+        },
+
+
+        standard: {
+
+            min: null,
+
+            typical: null,
+
+            max: null,
+
+            status: "pending_market_scan",
+
+            confidence: "low"
+
+        },
+
+
+        luxury: {
+
+            min: null,
+
+            typical: null,
+
+            max: null,
+
+            status: "pending_market_scan",
+
+            confidence: "low"
+
+        }
+
+    },
+
+
+    /*
+    =========================================================
+    8. الخدمات الإضافية
+    =========================================================
+    */
+
+    additions: {
+
+
+        gypsum_basic: {
+
+            unit: "m2",
+
+            status: "pending_market_scan",
+
+            confidence: "low",
+
+            price: null
+
+        },
+
+
+        doors: {
+
+            unit: "door",
+
+            status: "pending_market_scan",
+
+            confidence: "low",
+
+            price: null
+
+        },
+
+
+        aluminum: {
+
+            unit: "m2",
+
+            status: "pending_market_scan",
+
+            confidence: "low",
+
+            price: null
+
+        }
+
+
+    },
+
+
+    /*
+    =========================================================
+    9. إعدادات الحسبة
+    =========================================================
+    */
+
+    calculator: {
+
+
+        reservePercentage: 0.10,
+
+
+        breakdown: {
+
+            materials: 0.65,
+
+            labor: 0.25,
+
+            management: 0.10
+
+        },
+
+
+        note:
+            "تقسيم 65/25/10 هو نموذج عرض داخل الحاسبة وليس دراسة رسمية لنسب التكلفة في كل مشروع."
+
+    },
+
+
+    /*
+    =========================================================
+    10. المدن والمواقع
+    =========================================================
+
+    لن نفعل فروق المدن قبل وجود بيانات كافية.
+    */
+
+    locations: {
+
+
+        cairo: {
+
+            label: "القاهرة",
+
+            multiplier: 1.00,
+
+            status: "neutral_reference"
+
+        },
+
+
+        giza: {
+
+            label: "الجيزة",
+
+            multiplier: 1.00,
+
+            status: "neutral_reference"
+
+        },
+
+
+        alexandria: {
+
+            label: "الإسكندرية",
+
+            multiplier: 1.00,
+
+            status: "neutral_reference"
+
+        },
+
+
+        new_cities: {
+
+            label: "المدن الجديدة",
+
+            multiplier: 1.00,
+
+            status: "neutral_reference"
+
+        },
+
+
+        other: {
+
+            label: "محافظات أخرى",
+
+            multiplier: 1.00,
+
+            status: "neutral_reference"
+
+        }
+
+    },
+
+
+    /*
+    =========================================================
+    11. المصادر
+    =========================================================
     */
 
     sources: [
 
         {
+
             name:
                 "بوابة الأسعار المحلية والعالمية التابعة لمجلس الوزراء",
 
@@ -324,12 +892,13 @@ const PRICING_DATA = {
                 "https://www.masrawy.com/news/news_economy/details/2026/9/24/3052960",
 
             covers:
-                "أسعار الحديد والأسمنت"
+                "الحديد والأسمنت"
 
         },
 
 
         {
+
             name:
                 "Moqaysa",
 
@@ -343,69 +912,33 @@ const PRICING_DATA = {
                 "https://moqaysa.com/en",
 
             covers:
-                "نطاقات أسعار التشطيب حسب مستوى الجودة"
+                "نطاقات أسعار التشطيب"
 
         },
 
 
         {
+
             name:
-                "The Design Hub Egypt",
-
-            type:
-                "company_market_reference",
-
-            updated:
-                "2026",
-
-            url:
-                "https://www.tdhegypt.com/ar/blog/%D8%B3%D8%B9%D8%B1-%D8%AA%D8%B4%D8%B7%D9%8A%D8%A8-%D8%A7%D9%84%D9%85%D8%AA%D8%B1-%D9%81%D9%8A-%D9%85%D8%B5%D8%B1",
-
-            covers:
-                "مستويات وأسعار استرشادية للتشطيب في مصر"
-
-        },
-
-
-        {
-            name:
-                "أسس كهرباء",
-
-            type:
-                "specialized_market_reference",
-
-            updated:
-                "2026-03",
-
-            url:
-                "https://www.aseskahraba.com/ar/blog/apartment-wiring-100sqm-egypt/",
-
-            covers:
-                "تكلفة تأسيس الكهرباء لشقة 100 متر"
-
-        },
-
-
-        {
-            name:
-                "كارفور مصر",
+                "Carrefour Egypt",
 
             type:
                 "retail_reference",
 
             updated:
-                "2026",
+                "2026-09",
 
             url:
                 "https://www.carrefouregypt.com/mafegy/ar/",
 
             covers:
-                "أسعار الأجهزة الكهربائية"
+                "الأجهزة والتكييفات والإلكترونيات"
 
         },
 
 
         {
+
             name:
                 "IKEA Egypt",
 
@@ -413,45 +946,17 @@ const PRICING_DATA = {
                 "retail_reference",
 
             updated:
-                "2026",
+                "2026-09",
 
             url:
-                "https://www.ikea.com/eg/en/cat/kitchens-ka003/",
+                "https://www.ikea.com/eg/en/",
 
             covers:
-                "أسعار أنظمة المطابخ والوحدات"
+                "المطابخ والوحدات"
 
         }
 
-    ],
-
-    /*
-    ==============================
-    سياسة الثقة
-    ==============================
-    */
-
-    dataQuality: {
-
-        finishing:
-            "market_ranges",
-
-        construction:
-            "provisional",
-
-        buildingMaterials:
-            "mixed_current_and_pending",
-
-        laborRates:
-            "pending_verification",
-
-        appliances:
-            "retail_reference",
-
-        kitchens:
-            "retail_reference"
-
-    }
+    ]
 
 };
 
