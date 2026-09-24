@@ -1,52 +1,36 @@
-import PRICING_DATA
-    from "../config/pricingData.js?version=20260925";
-
+import PRICING_DATA from "../config/pricingData.js?version=20260925";
 
 class CalculatorEngine {
 
     constructor(area, type, level, userBudget = null) {
 
-        this.area =
-            Number(area) || 0;
+        this.area = Number(area) || 0;
 
-        this.type =
-            type;
+        this.type = type;
 
-        this.level =
-            level;
+        this.level = level;
 
         this.userBudget =
-            userBudget === null ||
-            userBudget === ""
+            userBudget === null || userBudget === ""
                 ? null
                 : Number(userBudget);
 
-        this.reservePercentage =
-            0.10;
+        this.reservePercentage = 0.10;
     }
 
 
     calculate() {
 
         if (this.area <= 0) {
-
-            throw new Error(
-                "المساحة غير صحيحة"
-            );
+            throw new Error("المساحة غير صحيحة");
         }
 
 
         const phase =
-            PRICING_DATA.phases[
-                this.type
-            ];
+            PRICING_DATA.phases[this.type];
 
 
-        if (
-            !phase ||
-            !phase[this.level]
-        ) {
-
+        if (!phase || !phase[this.level]) {
             throw new Error(
                 "نوع المشروع أو مستوى الجودة غير صحيح"
             );
@@ -58,63 +42,47 @@ class CalculatorEngine {
 
 
         const minTotal =
-            this.area *
-            basePrices.min;
+            this.area * basePrices.min;
 
 
         const typicalTotal =
-            this.area *
-            basePrices.typical;
+            this.area * basePrices.typical;
 
 
         const maxTotal =
-            this.area *
-            basePrices.max;
+            this.area * basePrices.max;
 
 
         const reserve =
-            typicalTotal *
-            this.reservePercentage;
+            typicalTotal * this.reservePercentage;
 
 
         const grandTotal =
-            typicalTotal +
-            reserve;
+            typicalTotal + reserve;
 
 
         const results = {
 
-            area:
-                this.area,
+            area: this.area,
 
-            type:
-                this.type,
+            type: this.type,
 
-            level:
-                this.level,
+            level: this.level,
 
-            userBudget:
-                this.userBudget,
+            userBudget: this.userBudget,
 
-            minTotal:
-                minTotal,
+            minTotal,
 
-            typicalTotal:
-                typicalTotal,
+            typicalTotal,
 
-            maxTotal:
-                maxTotal,
+            maxTotal,
 
-            reserve:
-                reserve,
+            reserve,
 
-            grandTotal:
-                grandTotal,
+            grandTotal,
 
             breakdown:
-                this.getBreakdown(
-                    typicalTotal
-                )
+                this.getBreakdown(typicalTotal)
 
         };
 
@@ -125,8 +93,7 @@ class CalculatorEngine {
         ) {
 
             results.budgetGap =
-                this.userBudget -
-                grandTotal;
+                this.userBudget - grandTotal;
 
 
             results.status =
@@ -168,19 +135,14 @@ class CalculatorEngine {
 
     getAlternatives(budget) {
 
-        const alternatives =
-            [];
+        const alternatives = [];
 
 
         const phase =
-            PRICING_DATA.phases[
-                this.type
-            ];
+            PRICING_DATA.phases[this.type];
 
 
-        Object.keys(
-            phase
-        ).forEach(level => {
+        Object.keys(phase).forEach(level => {
 
             const cost =
                 phase[level].typical *
@@ -189,24 +151,16 @@ class CalculatorEngine {
 
             const costWithReserve =
                 cost *
-                (
-                    1 +
-                    this.reservePercentage
-                );
+                (1 + this.reservePercentage);
 
 
-            if (
-                costWithReserve <=
-                budget
-            ) {
+            if (costWithReserve <= budget) {
 
                 alternatives.push({
 
-                    level:
-                        level,
+                    level,
 
-                    cost:
-                        costWithReserve
+                    cost: costWithReserve
 
                 });
 
@@ -220,6 +174,5 @@ class CalculatorEngine {
     }
 
 }
-
 
 export default CalculatorEngine;
