@@ -1,75 +1,224 @@
 import PRICING_DATA from "../config/pricingData.js?version=20260925";
 
+
 class CalculatorEngine {
 
-    constructor(area, type, level, userBudget = null) {
+    constructor(
+        area,
+        type,
+        level,
+        userBudget = null,
+        options = {}
+    ) {
 
-        this.area = Number(area) || 0;
+        this.area =
+            Number(area) || 0;
 
-        this.type = type;
+        this.type =
+            type;
 
-        this.level = level;
+        this.level =
+            level;
 
         this.userBudget =
-            userBudget === null || userBudget === ""
+            userBudget === null ||
+            userBudget === ""
                 ? null
                 : Number(userBudget);
 
-        this.reservePercentage = 0.10;
+
+        this.options = {
+
+            location:
+                options.location || "cairo",
+
+            kitchen:
+                options.kitchen || "none",
+
+            airConditioning:
+                options.airConditioning || {
+                    hp_1_5: 0,
+                    hp_2_25: 0
+                },
+
+            appliances:
+                options.appliances || {},
+
+            furniture:
+                options.furniture || "none",
+
+            additions:
+                options.additions || {}
+
+        };
+
+
+        this.reservePercentage =
+            PRICING_DATA.calculator?.reservePercentage ??
+            0.10;
+
     }
 
 
+    /*
+    =========================================================
+    MAIN CALCULATION
+    =========================================================
+    */
+
     calculate() {
 
-        if (this.area <= 0) {
-            throw new Error("المساحة غير صحيحة");
-        }
+        this.validate();
 
 
-        const phase =
-            PRICING_DATA.phases[this.type];
+        const baseResult =
+            this.calculateBaseProject();
 
 
-        if (!phase || !phase[this.level]) {
-            throw new Error(
-                "نوع المشروع أو مستوى الجودة غير صحيح"
-            );
-        }
+        const kitchenResult =
+            this.calculateKitchen();
 
 
-        const basePrices =
-            phase[this.level];
+        const airConditioningResult =
+            this.calculateAirConditioning();
+
+
+        const appliancesResult =
+            this.calculateAppliances();
+
+
+        const furnitureResult =
+            this.calculateFurniture();
+
+
+        const additionsResult =
+            this.calculateAdditions();
+
+
+        const optionalMinTotal =
+            kitchenResult.min +
+            airConditioningResult.min +
+            appliancesResult.min +
+            furnitureResult.min +
+            additionsResult.min;
+
+
+        const optionalTypicalTotal =
+            kitchenResult.typical +
+            airConditioningResult.typical +
+            appliancesResult.typical +
+            furnitureResult.typical +
+            additionsResult.typical;
+
+
+        const optionalMaxTotal =
+            kitchenResult.max +
+            airConditioningResult.max +
+            appliancesResult.max +
+            furnitureResult.max +
+            additionsResult.max;
+
+
+        const locationMultiplier =
+            this.getLocationMultiplier();
 
 
         const minTotal =
-            this.area * basePrices.min;
+            (
+                baseResult.minTotal +
+                optionalMinTotal
+            ) *
+            locationMultiplier;
 
 
         const typicalTotal =
-            this.area * basePrices.typical;
+            (
+                baseResult.typicalTotal +
+                optionalTypicalTotal
+            ) *
+            locationMultiplier;
 
 
         const maxTotal =
-            this.area * basePrices.max;
+            (
+                baseResult.maxTotal +
+                optionalMaxTotal
+            ) *
+            locationMultiplier;
 
 
         const reserve =
-            typicalTotal * this.reservePercentage;
+            typicalTotal *
+            this.reservePercentage;
 
 
         const grandTotal =
-            typicalTotal + reserve;
+            typicalTotal +
+            reserve;
 
 
-        const results = {
+        const result = {
 
-            area: this.area,
+            area:
+                this.area,
 
-            type: this.type,
+            type:
+                this.type,
 
-            level: this.level,
+            level:
+                this.level,
 
-            userBudget: this.userBudget,
+            userBudget:
+                this.userBudget,
+
+
+            /*
+            ---------------------------------------------
+            Base project
+            ---------------------------------------------
+            */
+
+            baseProject: {
+
+                min:
+                    baseResult.minTotal,
+
+                typical:
+                    baseResult.typicalTotal,
+
+                max:
+                    baseResult.maxTotal
+
+            },
+
+
+            /*
+            ---------------------------------------------
+            Optional components
+            ---------------------------------------------
+            */
+
+            kitchen:
+                kitchenResult,
+
+            airConditioning:
+                airConditioningResult,
+
+            appliances:
+                appliancesResult,
+
+            furniture:
+                furnitureResult,
+
+            additions:
+                additionsResult,
+
+
+            /*
+            ---------------------------------------------
+            Main totals
+            ---------------------------------------------
+            */
 
             minTotal,
 
@@ -81,28 +230,70 @@ class CalculatorEngine {
 
             grandTotal,
 
+
+            /*
+            ---------------------------------------------
+            Breakdown
+            ---------------------------------------------
+            */
+
             breakdown:
-                this.getBreakdown(typicalTotal)
+                this.getBreakdown(
+                    typicalTotal
+                ),
+
+
+            /*
+            ---------------------------------------------
+            Metadata
+            ---------------------------------------------
+            */
+
+            metadata: {
+
+                pricingVersion:
+                    PRICING_DATA.metadata?.version ??
+                    null,
+
+                lastUpdated:
+                    PRICING_DATA.metadata?.lastUpdated ??
+                    null,
+
+                currency:
+                    PRICING_DATA.metadata?.currency ??
+                    "EGP",
+
+                location:
+                    this.options.location
+
+            }
 
         };
 
+
+        /*
+        =====================================================
+        BUDGET COMPARISON
+        =====================================================
+        */
 
         if (
             this.userBudget !== null &&
             this.userBudget > 0
         ) {
 
-            results.budgetGap =
-                this.userBudget - grandTotal;
+            result.budgetGap =
+                this.userBudget -
+                grandTotal;
 
 
-            results.status =
-                results.budgetGap >= 0
+            result.status =
+                result.budgetGap >= 0
                     ? "within_budget"
                     : "over_budget";
 
 
-            results.alternativeScenarios =
+            result.alternativeScenarios =
                 this.getAlternatives(
                     this.userBudget
                 );
@@ -110,28 +301,792 @@ class CalculatorEngine {
         }
 
 
-        return results;
+        /*
+        =====================================================
+        DATA WARNINGS
+        =====================================================
+        */
+
+        result.warnings =
+            this.getDataWarnings();
+
+
+        return result;
 
     }
 
 
-    getBreakdown(total) {
+    /*
+    =========================================================
+    VALIDATION
+    =========================================================
+    */
+
+    validate() {
+
+        if (
+            !Number.isFinite(this.area) ||
+            this.area <= 0
+        ) {
+
+            throw new Error(
+                "المساحة غير صحيحة"
+            );
+
+        }
+
+
+        if (
+            !PRICING_DATA.phases ||
+            !PRICING_DATA.phases[this.type]
+        ) {
+
+            throw new Error(
+                "نوع المشروع غير صحيح"
+            );
+
+        }
+
+
+        if (
+            !PRICING_DATA.phases[this.type][this.level]
+        ) {
+
+            throw new Error(
+                "مستوى الجودة غير صحيح"
+            );
+
+        }
+
+    }
+
+
+    /*
+    =========================================================
+    BASE PROJECT
+    =========================================================
+    */
+
+    calculateBaseProject() {
+
+        const phase =
+            PRICING_DATA.phases[
+                this.type
+            ];
+
+
+        const basePrices =
+            phase[this.level];
+
 
         return {
 
-            materials:
-                total * 0.65,
+            minTotal:
+                this.area *
+                Number(basePrices.min || 0),
 
-            labor:
-                total * 0.25,
 
-            management:
-                total * 0.10
+            typicalTotal:
+                this.area *
+                Number(basePrices.typical || 0),
+
+
+            maxTotal:
+                this.area *
+                Number(basePrices.max || 0)
 
         };
 
     }
 
+
+    /*
+    =========================================================
+    KITCHEN
+    =========================================================
+    */
+
+    calculateKitchen() {
+
+        const selected =
+            this.options.kitchen;
+
+
+        if (
+            !selected ||
+            selected === "none"
+        ) {
+
+            return this.emptyComponent(
+                "kitchen"
+            );
+
+        }
+
+
+        const kitchen =
+            PRICING_DATA.kitchen?.[selected];
+
+
+        if (!kitchen) {
+
+            return this.unpricedComponent(
+                "kitchen",
+                selected
+            );
+
+        }
+
+
+        return {
+
+            selected,
+
+            min:
+                Number(kitchen.min || 0),
+
+            typical:
+                Number(kitchen.typical || 0),
+
+            max:
+                Number(kitchen.max || 0),
+
+            status:
+                kitchen.status || "unknown",
+
+            confidence:
+                kitchen.confidence || "unknown",
+
+            source:
+                kitchen.source || null,
+
+            sourceUrl:
+                kitchen.sourceUrl || null,
+
+            note:
+                kitchen.note || null
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    AIR CONDITIONING
+    =========================================================
+    */
+
+    calculateAirConditioning() {
+
+        const selected =
+            this.options.airConditioning || {};
+
+
+        let min = 0;
+
+        let typical = 0;
+
+        let max = 0;
+
+
+        const items = [];
+
+
+        Object.keys(selected)
+            .forEach(key => {
+
+                const quantity =
+                    Number(
+                        selected[key]
+                    ) || 0;
+
+
+                if (
+                    quantity <= 0
+                ) {
+
+                    return;
+
+                }
+
+
+                const item =
+                    PRICING_DATA.air_conditioning?.[key];
+
+
+                if (!item) {
+
+                    items.push({
+
+                        key,
+
+                        quantity,
+
+                        status:
+                            "unpriced"
+
+                    });
+
+                    return;
+
+                }
+
+
+                const itemMin =
+                    Number(
+                        item.min || 0
+                    );
+
+
+                const itemTypical =
+                    Number(
+                        item.typical || 0
+                    );
+
+
+                const itemMax =
+                    Number(
+                        item.max || 0
+                    );
+
+
+                min +=
+                    itemMin *
+                    quantity;
+
+
+                typical +=
+                    itemTypical *
+                    quantity;
+
+
+                max +=
+                    itemMax *
+                    quantity;
+
+
+                items.push({
+
+                    key,
+
+                    quantity,
+
+                    min:
+                        itemMin *
+                        quantity,
+
+                    typical:
+                        itemTypical *
+                        quantity,
+
+                    max:
+                        itemMax *
+                        quantity,
+
+                    status:
+                        item.status || "unknown",
+
+                    confidence:
+                        item.confidence || "unknown",
+
+                    source:
+                        item.source || null,
+
+                    sourceUrl:
+                        item.sourceUrl || null,
+
+                    note:
+                        item.note || null
+
+                });
+
+            });
+
+
+        return {
+
+            min,
+
+            typical,
+
+            max,
+
+            items
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    APPLIANCES
+    =========================================================
+
+    appliances format:
+
+    {
+        cooker: 1,
+        microwave: 1,
+        television_55: 1
+    }
+
+    أي جهاز غير موجود بسعر حقيقي
+    يظهر كـ unpriced ولا يدخل في الإجمالي.
+    */
+
+    calculateAppliances() {
+
+        const selected =
+            this.options.appliances || {};
+
+
+        let min = 0;
+
+        let typical = 0;
+
+        let max = 0;
+
+
+        const items = [];
+
+
+        Object.keys(selected)
+            .forEach(key => {
+
+                const quantity =
+                    Number(
+                        selected[key]
+                    ) || 0;
+
+
+                if (
+                    quantity <= 0
+                ) {
+
+                    return;
+
+                }
+
+
+                const item =
+                    PRICING_DATA.appliances?.[key];
+
+
+                if (
+                    !item ||
+                    item.min === null ||
+                    item.min === undefined
+                ) {
+
+                    items.push({
+
+                        key,
+
+                        quantity,
+
+                        status:
+                            "unpriced"
+
+                    });
+
+                    return;
+
+                }
+
+
+                const itemMin =
+                    Number(
+                        item.min || 0
+                    );
+
+
+                const itemTypical =
+                    Number(
+                        item.typical || 0
+                    );
+
+
+                const itemMax =
+                    Number(
+                        item.max ?? item.typical ?? 0
+                    );
+
+
+                min +=
+                    itemMin *
+                    quantity;
+
+
+                typical +=
+                    itemTypical *
+                    quantity;
+
+
+                max +=
+                    itemMax *
+                    quantity;
+
+
+                items.push({
+
+                    key,
+
+                    quantity,
+
+                    min:
+                        itemMin *
+                        quantity,
+
+                    typical:
+                        itemTypical *
+                        quantity,
+
+                    max:
+                        itemMax *
+                        quantity,
+
+                    status:
+                        item.status || "unknown",
+
+                    confidence:
+                        item.confidence || "unknown",
+
+                    source:
+                        item.source || null,
+
+                    sourceUrl:
+                        item.sourceUrl || null
+
+                });
+
+            });
+
+
+        return {
+
+            min,
+
+            typical,
+
+            max,
+
+            items
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    FURNITURE
+    =========================================================
+
+    حاليًا بيانات الأثاث غير مسعرة.
+    لذلك لا ندخل أي رقم غير موثق.
+    */
+
+    calculateFurniture() {
+
+        const selected =
+            this.options.furniture;
+
+
+        if (
+            !selected ||
+            selected === "none"
+        ) {
+
+            return this.emptyComponent(
+                "furniture"
+            );
+
+        }
+
+
+        const item =
+            PRICING_DATA.furniture?.[
+                selected
+            ];
+
+
+        if (
+            !item ||
+            item.min === null ||
+            item.min === undefined
+        ) {
+
+            return this.unpricedComponent(
+                "furniture",
+                selected
+            );
+
+        }
+
+
+        return {
+
+            selected,
+
+            min:
+                Number(item.min || 0),
+
+            typical:
+                Number(item.typical || 0),
+
+            max:
+                Number(item.max || 0),
+
+            status:
+                item.status || "unknown",
+
+            confidence:
+                item.confidence || "unknown"
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    ADDITIONS
+    =========================================================
+
+    additions format:
+
+    {
+        gypsum_basic: 20,
+        doors: 5,
+        aluminum: 10
+    }
+
+    الكمية تعتمد على وحدة البند.
+    */
+
+    calculateAdditions() {
+
+        const selected =
+            this.options.additions || {};
+
+
+        let min = 0;
+
+        let typical = 0;
+
+        let max = 0;
+
+
+        const items = [];
+
+
+        Object.keys(selected)
+            .forEach(key => {
+
+                const quantity =
+                    Number(
+                        selected[key]
+                    ) || 0;
+
+
+                if (
+                    quantity <= 0
+                ) {
+
+                    return;
+
+                }
+
+
+                const item =
+                    PRICING_DATA.additions?.[key];
+
+
+                if (
+                    !item ||
+                    item.price === null ||
+                    item.price === undefined
+                ) {
+
+                    items.push({
+
+                        key,
+
+                        quantity,
+
+                        status:
+                            "unpriced"
+
+                    });
+
+                    return;
+
+                }
+
+
+                const price =
+                    Number(
+                        item.price
+                    );
+
+
+                min +=
+                    price *
+                    quantity;
+
+
+                typical +=
+                    price *
+                    quantity;
+
+
+                max +=
+                    price *
+                    quantity;
+
+
+                items.push({
+
+                    key,
+
+                    quantity,
+
+                    min:
+                        price *
+                        quantity,
+
+                    typical:
+                        price *
+                        quantity,
+
+                    max:
+                        price *
+                        quantity,
+
+                    status:
+                        item.status || "unknown",
+
+                    confidence:
+                        item.confidence || "unknown"
+
+                });
+
+            });
+
+
+        return {
+
+            min,
+
+            typical,
+
+            max,
+
+            items
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    LOCATION
+    =========================================================
+    */
+
+    getLocationMultiplier() {
+
+        const location =
+            PRICING_DATA.locations?.[
+                this.options.location
+            ];
+
+
+        if (!location) {
+
+            return 1;
+
+        }
+
+
+        const multiplier =
+            Number(
+                location.multiplier
+            );
+
+
+        if (
+            !Number.isFinite(
+                multiplier
+            ) ||
+            multiplier <= 0
+        ) {
+
+            return 1;
+
+        }
+
+
+        return multiplier;
+
+    }
+
+
+    /*
+    =========================================================
+    BREAKDOWN
+    =========================================================
+    */
+
+    getBreakdown(total) {
+
+        const breakdownConfig =
+            PRICING_DATA.calculator?.breakdown || {
+
+                materials: 0.65,
+
+                labor: 0.25,
+
+                management: 0.10
+
+            };
+
+
+        return {
+
+            materials:
+                total *
+                Number(
+                    breakdownConfig.materials || 0
+                ),
+
+
+            labor:
+                total *
+                Number(
+                    breakdownConfig.labor || 0
+                ),
+
+
+            management:
+                total *
+                Number(
+                    breakdownConfig.management || 0
+                )
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    ALTERNATIVE SCENARIOS
+    =========================================================
+    */
 
     getAlternatives(budget) {
 
@@ -139,40 +1094,257 @@ class CalculatorEngine {
 
 
         const phase =
-            PRICING_DATA.phases[this.type];
+            PRICING_DATA.phases[
+                this.type
+            ];
 
 
-        Object.keys(phase).forEach(level => {
+        Object.keys(phase)
+            .forEach(level => {
 
-            const cost =
-                phase[level].typical *
-                this.area;
-
-
-            const costWithReserve =
-                cost *
-                (1 + this.reservePercentage);
+                const typical =
+                    Number(
+                        phase[level].typical || 0
+                    );
 
 
-            if (costWithReserve <= budget) {
+                const cost =
+                    typical *
+                    this.area *
+                    this.getLocationMultiplier();
 
-                alternatives.push({
 
-                    level,
+                const costWithReserve =
+                    cost *
+                    (
+                        1 +
+                        this.reservePercentage
+                    );
 
-                    cost: costWithReserve
 
-                });
+                if (
+                    costWithReserve <=
+                    budget
+                ) {
 
-            }
+                    alternatives.push({
 
-        });
+                        level,
+
+                        cost:
+                            costWithReserve
+
+                    });
+
+                }
+
+            });
 
 
         return alternatives;
 
     }
 
+
+    /*
+    =========================================================
+    EMPTY COMPONENT
+    =========================================================
+    */
+
+    emptyComponent(name) {
+
+        return {
+
+            name,
+
+            selected:
+                "none",
+
+            min: 0,
+
+            typical: 0,
+
+            max: 0,
+
+            status:
+                "not_selected",
+
+            confidence:
+                null
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    UNPRICED COMPONENT
+    =========================================================
+    */
+
+    unpricedComponent(
+        name,
+        selected
+    ) {
+
+        return {
+
+            name,
+
+            selected,
+
+            min: 0,
+
+            typical: 0,
+
+            max: 0,
+
+            status:
+                "unpriced",
+
+            confidence:
+                "low",
+
+            note:
+                "تم اختيار هذا البند لكن لا توجد بيانات سعر موثقة داخله حاليًا، لذلك لم يتم إدخاله في الإجمالي."
+
+        };
+
+    }
+
+
+    /*
+    =========================================================
+    DATA WARNINGS
+    =========================================================
+    */
+
+    getDataWarnings() {
+
+        const warnings = [];
+
+
+        /*
+        Check furniture
+        */
+
+        if (
+            this.options.furniture &&
+            this.options.furniture !== "none"
+        ) {
+
+            const furniture =
+                PRICING_DATA.furniture?.[
+                    this.options.furniture
+                ];
+
+
+            if (
+                !furniture ||
+                furniture.min === null ||
+                furniture.min === undefined
+            ) {
+
+                warnings.push(
+                    "بيانات الأثاث المختارة تحتاج إلى تحديث سعري قبل إدخالها في الإجمالي."
+                );
+
+            }
+
+        }
+
+
+        /*
+        Check appliances
+        */
+
+        Object.keys(
+            this.options.appliances || {}
+        ).forEach(key => {
+
+            const quantity =
+                Number(
+                    this.options.appliances[key]
+                ) || 0;
+
+
+            if (
+                quantity <= 0
+            ) {
+
+                return;
+
+            }
+
+
+            const item =
+                PRICING_DATA.appliances?.[key];
+
+
+            if (
+                !item ||
+                item.min === null ||
+                item.min === undefined
+            ) {
+
+                warnings.push(
+                    `بيانات الجهاز ${key} تحتاج إلى تحديث سعري.`
+                );
+
+            }
+
+        });
+
+
+        /*
+        Check additions
+        */
+
+        Object.keys(
+            this.options.additions || {}
+        ).forEach(key => {
+
+            const quantity =
+                Number(
+                    this.options.additions[key]
+                ) || 0;
+
+
+            if (
+                quantity <= 0
+            ) {
+
+                return;
+
+            }
+
+
+            const item =
+                PRICING_DATA.additions?.[key];
+
+
+            if (
+                !item ||
+                item.price === null ||
+                item.price === undefined
+            ) {
+
+                warnings.push(
+                    `بيانات البند الإضافي ${key} تحتاج إلى تحديث سعري.`
+                );
+
+            }
+
+        });
+
+
+        return warnings;
+
+    }
+
 }
+
 
 export default CalculatorEngine;
