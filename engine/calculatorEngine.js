@@ -1,5 +1,5 @@
 import PRICING_DATA
-    from "../config/pricingData.js?v=20260925";
+    from "../config/pricingData.js?version=20260925";
 
 
 class CalculatorEngine {
@@ -23,7 +23,6 @@ class CalculatorEngine {
 
         this.reservePercentage =
             0.10;
-
     }
 
 
@@ -34,7 +33,6 @@ class CalculatorEngine {
             throw new Error(
                 "المساحة غير صحيحة"
             );
-
         }
 
 
@@ -52,7 +50,6 @@ class CalculatorEngine {
             throw new Error(
                 "نوع المشروع أو مستوى الجودة غير صحيح"
             );
-
         }
 
 
