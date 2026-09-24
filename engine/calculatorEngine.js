@@ -11,14 +11,11 @@ class CalculatorEngine {
         options = {}
     ) {
 
-        this.area =
-            Number(area) || 0;
+        this.area = Number(area) || 0;
 
-        this.type =
-            type;
+        this.type = type;
 
-        this.level =
-            level;
+        this.level = level;
 
         this.userBudget =
             userBudget === null ||
@@ -59,12 +56,6 @@ class CalculatorEngine {
 
     }
 
-
-    /*
-    =========================================================
-    MAIN CALCULATION
-    =========================================================
-    */
 
     calculate() {
 
@@ -159,24 +150,14 @@ class CalculatorEngine {
 
         const result = {
 
-            area:
-                this.area,
+            area: this.area,
 
-            type:
-                this.type,
+            type: this.type,
 
-            level:
-                this.level,
+            level: this.level,
 
-            userBudget:
-                this.userBudget,
+            userBudget: this.userBudget,
 
-
-            /*
-            ---------------------------------------------
-            Base project
-            ---------------------------------------------
-            */
 
             baseProject: {
 
@@ -191,12 +172,6 @@ class CalculatorEngine {
 
             },
 
-
-            /*
-            ---------------------------------------------
-            Optional components
-            ---------------------------------------------
-            */
 
             kitchen:
                 kitchenResult,
@@ -214,12 +189,6 @@ class CalculatorEngine {
                 additionsResult,
 
 
-            /*
-            ---------------------------------------------
-            Main totals
-            ---------------------------------------------
-            */
-
             minTotal,
 
             typicalTotal,
@@ -231,23 +200,11 @@ class CalculatorEngine {
             grandTotal,
 
 
-            /*
-            ---------------------------------------------
-            Breakdown
-            ---------------------------------------------
-            */
-
             breakdown:
                 this.getBreakdown(
                     typicalTotal
                 ),
 
-
-            /*
-            ---------------------------------------------
-            Metadata
-            ---------------------------------------------
-            */
 
             metadata: {
 
@@ -270,12 +227,6 @@ class CalculatorEngine {
 
         };
 
-
-        /*
-        =====================================================
-        BUDGET COMPARISON
-        =====================================================
-        */
 
         if (
             this.userBudget !== null &&
@@ -301,12 +252,6 @@ class CalculatorEngine {
         }
 
 
-        /*
-        =====================================================
-        DATA WARNINGS
-        =====================================================
-        */
-
         result.warnings =
             this.getDataWarnings();
 
@@ -315,12 +260,6 @@ class CalculatorEngine {
 
     }
 
-
-    /*
-    =========================================================
-    VALIDATION
-    =========================================================
-    */
 
     validate() {
 
@@ -361,12 +300,6 @@ class CalculatorEngine {
     }
 
 
-    /*
-    =========================================================
-    BASE PROJECT
-    =========================================================
-    */
-
     calculateBaseProject() {
 
         const phase =
@@ -383,28 +316,28 @@ class CalculatorEngine {
 
             minTotal:
                 this.area *
-                Number(basePrices.min || 0),
+                Number(
+                    basePrices.min || 0
+                ),
 
 
             typicalTotal:
                 this.area *
-                Number(basePrices.typical || 0),
+                Number(
+                    basePrices.typical || 0
+                ),
 
 
             maxTotal:
                 this.area *
-                Number(basePrices.max || 0)
+                Number(
+                    basePrices.max || 0
+                )
 
         };
 
     }
 
-
-    /*
-    =========================================================
-    KITCHEN
-    =========================================================
-    */
 
     calculateKitchen() {
 
@@ -425,7 +358,9 @@ class CalculatorEngine {
 
 
         const kitchen =
-            PRICING_DATA.kitchen?.[selected];
+            PRICING_DATA.kitchen?.[
+                selected
+            ];
 
 
         if (!kitchen) {
@@ -443,44 +378,50 @@ class CalculatorEngine {
             selected,
 
             min:
-                Number(kitchen.min || 0),
+                Number(
+                    kitchen.min || 0
+                ),
 
             typical:
-                Number(kitchen.typical || 0),
+                Number(
+                    kitchen.typical || 0
+                ),
 
             max:
-                Number(kitchen.max || 0),
+                Number(
+                    kitchen.max || 0
+                ),
 
             status:
-                kitchen.status || "unknown",
+                kitchen.status ||
+                "unknown",
 
             confidence:
-                kitchen.confidence || "unknown",
+                kitchen.confidence ||
+                "unknown",
 
             source:
-                kitchen.source || null,
+                kitchen.source ||
+                null,
 
             sourceUrl:
-                kitchen.sourceUrl || null,
+                kitchen.sourceUrl ||
+                null,
 
             note:
-                kitchen.note || null
+                kitchen.note ||
+                null
 
         };
 
     }
 
 
-    /*
-    =========================================================
-    AIR CONDITIONING
-    =========================================================
-    */
-
     calculateAirConditioning() {
 
         const selected =
-            this.options.airConditioning || {};
+            this.options.airConditioning ||
+            {};
 
 
         let min = 0;
@@ -512,7 +453,9 @@ class CalculatorEngine {
 
 
                 const item =
-                    PRICING_DATA.air_conditioning?.[key];
+                    PRICING_DATA.air_conditioning?.[
+                        key
+                    ];
 
 
                 if (!item) {
@@ -585,19 +528,24 @@ class CalculatorEngine {
                         quantity,
 
                     status:
-                        item.status || "unknown",
+                        item.status ||
+                        "unknown",
 
                     confidence:
-                        item.confidence || "unknown",
+                        item.confidence ||
+                        "unknown",
 
                     source:
-                        item.source || null,
+                        item.source ||
+                        null,
 
                     sourceUrl:
-                        item.sourceUrl || null,
+                        item.sourceUrl ||
+                        null,
 
                     note:
-                        item.note || null
+                        item.note ||
+                        null
 
                 });
 
@@ -619,27 +567,11 @@ class CalculatorEngine {
     }
 
 
-    /*
-    =========================================================
-    APPLIANCES
-    =========================================================
-
-    appliances format:
-
-    {
-        cooker: 1,
-        microwave: 1,
-        television_55: 1
-    }
-
-    أي جهاز غير موجود بسعر حقيقي
-    يظهر كـ unpriced ولا يدخل في الإجمالي.
-    */
-
     calculateAppliances() {
 
         const selected =
-            this.options.appliances || {};
+            this.options.appliances ||
+            {};
 
 
         let min = 0;
@@ -671,7 +603,9 @@ class CalculatorEngine {
 
 
                 const item =
-                    PRICING_DATA.appliances?.[key];
+                    PRICING_DATA.appliances?.[
+                        key
+                    ];
 
 
                 if (
@@ -710,7 +644,9 @@ class CalculatorEngine {
 
                 const itemMax =
                     Number(
-                        item.max ?? item.typical ?? 0
+                        item.max ??
+                        item.typical ??
+                        0
                     );
 
 
@@ -748,16 +684,20 @@ class CalculatorEngine {
                         quantity,
 
                     status:
-                        item.status || "unknown",
+                        item.status ||
+                        "unknown",
 
                     confidence:
-                        item.confidence || "unknown",
+                        item.confidence ||
+                        "unknown",
 
                     source:
-                        item.source || null,
+                        item.source ||
+                        null,
 
                     sourceUrl:
-                        item.sourceUrl || null
+                        item.sourceUrl ||
+                        null
 
                 });
 
@@ -778,15 +718,6 @@ class CalculatorEngine {
 
     }
 
-
-    /*
-    =========================================================
-    FURNITURE
-    =========================================================
-
-    حاليًا بيانات الأثاث غير مسعرة.
-    لذلك لا ندخل أي رقم غير موثق.
-    */
 
     calculateFurniture() {
 
@@ -831,45 +762,38 @@ class CalculatorEngine {
             selected,
 
             min:
-                Number(item.min || 0),
+                Number(
+                    item.min || 0
+                ),
 
             typical:
-                Number(item.typical || 0),
+                Number(
+                    item.typical || 0
+                ),
 
             max:
-                Number(item.max || 0),
+                Number(
+                    item.max || 0
+                ),
 
             status:
-                item.status || "unknown",
+                item.status ||
+                "unknown",
 
             confidence:
-                item.confidence || "unknown"
+                item.confidence ||
+                "unknown"
 
         };
 
     }
 
 
-    /*
-    =========================================================
-    ADDITIONS
-    =========================================================
-
-    additions format:
-
-    {
-        gypsum_basic: 20,
-        doors: 5,
-        aluminum: 10
-    }
-
-    الكمية تعتمد على وحدة البند.
-    */
-
     calculateAdditions() {
 
         const selected =
-            this.options.additions || {};
+            this.options.additions ||
+            {};
 
 
         let min = 0;
@@ -901,7 +825,9 @@ class CalculatorEngine {
 
 
                 const item =
-                    PRICING_DATA.additions?.[key];
+                    PRICING_DATA.additions?.[
+                        key
+                    ];
 
 
                 if (
@@ -966,10 +892,12 @@ class CalculatorEngine {
                         quantity,
 
                     status:
-                        item.status || "unknown",
+                        item.status ||
+                        "unknown",
 
                     confidence:
-                        item.confidence || "unknown"
+                        item.confidence ||
+                        "unknown"
 
                 });
 
@@ -990,12 +918,6 @@ class CalculatorEngine {
 
     }
 
-
-    /*
-    =========================================================
-    LOCATION
-    =========================================================
-    */
 
     getLocationMultiplier() {
 
@@ -1019,9 +941,7 @@ class CalculatorEngine {
 
 
         if (
-            !Number.isFinite(
-                multiplier
-            ) ||
+            !Number.isFinite(multiplier) ||
             multiplier <= 0
         ) {
 
@@ -1035,16 +955,11 @@ class CalculatorEngine {
     }
 
 
-    /*
-    =========================================================
-    BREAKDOWN
-    =========================================================
-    */
-
     getBreakdown(total) {
 
         const breakdownConfig =
-            PRICING_DATA.calculator?.breakdown || {
+            PRICING_DATA.calculator?.breakdown ||
+            {
 
                 materials: 0.65,
 
@@ -1082,12 +997,6 @@ class CalculatorEngine {
     }
 
 
-    /*
-    =========================================================
-    ALTERNATIVE SCENARIOS
-    =========================================================
-    */
-
     getAlternatives(budget) {
 
         const alternatives = [];
@@ -1123,8 +1032,7 @@ class CalculatorEngine {
 
 
                 if (
-                    costWithReserve <=
-                    budget
+                    costWithReserve <= budget
                 ) {
 
                     alternatives.push({
@@ -1145,12 +1053,6 @@ class CalculatorEngine {
 
     }
 
-
-    /*
-    =========================================================
-    EMPTY COMPONENT
-    =========================================================
-    */
 
     emptyComponent(name) {
 
@@ -1177,12 +1079,6 @@ class CalculatorEngine {
 
     }
 
-
-    /*
-    =========================================================
-    UNPRICED COMPONENT
-    =========================================================
-    */
 
     unpricedComponent(
         name,
@@ -1215,20 +1111,10 @@ class CalculatorEngine {
     }
 
 
-    /*
-    =========================================================
-    DATA WARNINGS
-    =========================================================
-    */
-
     getDataWarnings() {
 
         const warnings = [];
 
-
-        /*
-        Check furniture
-        */
 
         if (
             this.options.furniture &&
@@ -1256,10 +1142,6 @@ class CalculatorEngine {
         }
 
 
-        /*
-        Check appliances
-        */
-
         Object.keys(
             this.options.appliances || {}
         ).forEach(key => {
@@ -1280,7 +1162,9 @@ class CalculatorEngine {
 
 
             const item =
-                PRICING_DATA.appliances?.[key];
+                PRICING_DATA.appliances?.[
+                    key
+                ];
 
 
             if (
@@ -1297,10 +1181,6 @@ class CalculatorEngine {
 
         });
 
-
-        /*
-        Check additions
-        */
 
         Object.keys(
             this.options.additions || {}
@@ -1322,7 +1202,9 @@ class CalculatorEngine {
 
 
             const item =
-                PRICING_DATA.additions?.[key];
+                PRICING_DATA.additions?.[
+                    key
+                ];
 
 
             if (
